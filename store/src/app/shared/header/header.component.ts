@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component, OnInit ,Input} from '@angular/core';
+import { BackendService } from '../../services/backend.service'
 @Component({
   selector: 'header',
   templateUrl: './header.component.html',
@@ -7,9 +7,29 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor() { }
+  @Input() pageTitle : string;
+  @Input() iconTitle : string;
+  @Input() helpTitle : string;
+  
+   config;
+   counter=1;
+   userStatusColor="warn"
+  constructor( private _backendService :BackendService ) { }
 
   ngOnInit() {
+    this.counter =0;
+    this.config = this._backendService.getConfig();
+    this._backendService.getCount().subscribe(
+      (res) =>{
+        this.counter = res
+      }
+    )
+    this._backendService.getColor().subscribe(
+      (res)=>{
+        this.userStatusColor = res ? 'primary' : 'warn'
+      }
+    )
   }
 
+  
 }
